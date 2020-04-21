@@ -1,0 +1,15 @@
+To start gcloud
+------------------------------------------------------------------------
+cd gini5/backend/src/gcloud
+docker container prune
+sudo python3.7 main.py --rest-port 3000 -f ./examples/sample_config.json
+ 
+To start the manager
+------------------------------------------------------------------------
+cd gini5/backend/src/gcloud/serverless/Manager
+python3.7 main.py
+
+> help
+> start [service] [docker_image] [port] [command]
+> stop [service]
+> quit
