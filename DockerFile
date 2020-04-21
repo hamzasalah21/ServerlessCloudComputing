@@ -1,0 +1,7 @@
+FROM python
+
+RUN mkdir c:\home\weatherFunction_v1
+
+COPY weatherFunction_v1.py /home/weatherFunction_v1/weatherFunction_v1.py
+
+CMD python /home/weatherFunction_v1/weatherFunction_v1.py
