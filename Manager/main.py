@@ -99,10 +99,10 @@ class ServerlessManager(cmd.Cmd):
     def do_EOF(self, args):
         return True
 
-    def do_scale(self):
+    def do_scale(self, args):
         for service in self.services:
             for containerid in self.services[service]:
-                resp = requests.get("unix:///var/run/docker.sock/containers/" + str(containerid)+ "}/stats")
+                resp = requests.get("unix:///var/run/docker.sock/containers/" + str(containerid)+ "/stats")
                 if resp.status_code == 200:
                     container_info = resp.json()
                     total_cpu_usage = container_info["cpu_stats"]["cpu_usage"]["total_usage"]
