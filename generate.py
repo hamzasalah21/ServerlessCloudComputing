@@ -12,12 +12,8 @@ def generateDockerFile(fns):
         print(fext)
 
         if fname in dfiles:
-            print("Docker File Already Generated")
-            # service already exists
+            print("Error: Service Already Exists")
         else:
-            #Get list of dependencies 
-            #dependencyList = getDependencies(f)
-
             #Create new path for Dockefile
             newpath = "./generated/" + fname
             if not path.exists(newpath):
@@ -31,10 +27,10 @@ def generateDockerFile(fns):
 
             df.write("FROM python:3" + '\n')
             df.write("ADD " + f + " /" + '\n')
-            #df.write("RUN pip install " + dependencyList + '\n')
             df.write("CMD [ 'python', './" + f + "' ]" + '\n')
+            df.close()
             
-            ## THIS PART NEEDS TO BE TESTED!!! #
+            # Build and Push Image 
             initialDir = getcwd()
 
             chdir(newpath)
@@ -43,10 +39,9 @@ def generateDockerFile(fns):
             system("docker push laemtl/gini_serverless_services:" + fname)
             
             chdir(initialDir)
-
-            df.close()
          
-# Usually would be dependency file
+# Function was created to get imports, but in the end the dockerfile did not need them
+# In practice we would add the dependencies based on a dependency file
 def getDependencies(f):
     dList = ""
     file = open("./functions/" + f, 'r')
@@ -78,8 +73,7 @@ def getDependencies(f):
     
     return dList.strip()
 
- 
+
+# Get list of function and generate dockerfile for each
 l = listdir("./functions")
 generateDockerFile(l)
-
-#print(getDependencies("WeatherFunction_v1.py"))
