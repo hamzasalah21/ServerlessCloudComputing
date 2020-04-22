@@ -1,4 +1,6 @@
-from os import listdir, path, makedirs
+from os import listdir, path, makedirs, chdir, system, getcwd
+from shutil import copyfile
+
 
 def generateDockerFile(fns):
     dfiles = listdir("./generated")
@@ -11,25 +13,40 @@ def generateDockerFile(fns):
 
         if fname in dfiles:
             print("Docker File Already Generated")
+            # service already exists
         else:
             #Get list of dependencies 
-            dependencyList = getDependencies(f)
+            #dependencyList = getDependencies(f)
 
             #Create new path for Dockefile
             newpath = "./generated/" + fname
             if not path.exists(newpath):
                 makedirs(newpath)
 
+            #copy file to new location
+            copyfile("./functions/" + f, "./generated/" + fname + "/" + f)
+
             #Generate Dockerfile
             df = open(newpath + "/Dockerfile", "a")
+
             df.write("FROM python:3" + '\n')
             df.write("ADD " + f + " /" + '\n')
-            df.write("RUN pip install " + dependencyList + '\n')
+            #df.write("RUN pip install " + dependencyList + '\n')
             df.write("CMD [ 'python', './" + f + "' ]" + '\n')
+            
+            ## THIS PART NEEDS TO BE TESTED!!! #
+            initialDir = getcwd()
+
+            chdir(newpath)
+
+            system("docker build -t laemtl/gini_serverless_services:" + fname + " .")
+            system("docker push laemtl/gini_serverless_services:" + fname)
+            
+            chdir(initialDir)
 
             df.close()
-
-# THIS FUNCTION IS RLY SKETCHY
+         
+# Usually would be dependency file
 def getDependencies(f):
     dList = ""
     file = open("./functions/" + f, 'r')
@@ -51,7 +68,7 @@ def getDependencies(f):
                 deps = rest.split(",")
 
                 for d in deps:
-                    dList = dList + " " + d + " "
+                    dList = dList + " " + d
             else:
                 inImports = False
                 break
@@ -61,8 +78,6 @@ def getDependencies(f):
     
     return dList.strip()
 
-
-        
  
 l = listdir("./functions")
 generateDockerFile(l)
