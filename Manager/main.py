@@ -99,6 +99,18 @@ class ServerlessManager(cmd.Cmd):
     def do_EOF(self, args):
         return True
 
+    def scale(self):
+        for service in self.services:
+            for containerid in self.services[service]:
+                resp = requests.get("unix:///var/run/docker.sock/containers/" + str(containerid)+ "}/stats")
+                if resp.status_code == 200:
+                    container_info = resp.json()
+                    total_cpu_usage = container_info["cpu_stats"]["cpu_usage"]["total_usage"]
+                    if total_cpu_usage > .80:
+                        #add containers
+                    elif total_cpu_usage < 0.01:
+                        #remove containers
+
 def parse(arg):
     'Convert a series of arguments to an argument tuple'
     return tuple(map(str, arg.split()))
