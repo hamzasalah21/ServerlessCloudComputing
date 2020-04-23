@@ -2,6 +2,7 @@ __author__ = "Laetitia Fesselier"
 
 import cmd
 import requests
+import docker
 
 # listen to receive stats 
 # before quitting stop everything
@@ -102,14 +103,17 @@ class ServerlessManager(cmd.Cmd):
     def do_scale(self, args):
         for service in self.services:
             for containerid in self.services[service]:
-                resp = requests.get("unix:///var/run/docker.sock/containers/" + str(containerid)+ "/stats")
+                client = docker.DockerClient(base_url='unix://var/run/docker.sock')
+                container = client.containers.get(str(containerid))
+                status = client.stats(str(containerid))
+                """resp = requests.get("unix:///var/run/docker.sock/containers/" + str(containerid)+ "/stats")
                 if resp.status_code == 200:
                     container_info = resp.json()
                     total_cpu_usage = container_info["cpu_stats"]["cpu_usage"]["total_usage"]
                     if total_cpu_usage > .80:
                         print('add containers')
                     elif total_cpu_usage < 0.01:
-                        print('remove containers')
+                        print('remove containers')"""
 
 def parse(arg):
     'Convert a series of arguments to an argument tuple'
