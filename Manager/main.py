@@ -103,9 +103,16 @@ class ServerlessManager(cmd.Cmd):
     def do_scale(self, args):
         for service in self.services:
             for containerid in self.services[service]:
-                client = docker.DockerClient(base_url='unix://var/run/docker.sock')
+                #trying with the low_level API 
+                client = docker.from_env()
+                client_lowlevel = docker.APIClient(base_url='unix://var/run/docker.sock')
+                client_stats = client_lowlevel.stats(container=containerid, decode=True, stream=False)
+                # tried with the dockerClient instead
+                """client = docker.DockerClient(base_url='unix://var/run/docker.sock')
                 container = client.containers.get(str(containerid))
                 status = client.stats(str(containerid))
+                """
+                #version traditional REST API requests
                 """resp = requests.get("unix:///var/run/docker.sock/containers/" + str(containerid)+ "/stats")
                 if resp.status_code == 200:
                     container_info = resp.json()
