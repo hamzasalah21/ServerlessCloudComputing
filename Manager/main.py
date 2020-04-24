@@ -12,7 +12,7 @@ class ServerlessManager(cmd.Cmd):
 
     services = {}
     prompt = '>> '
-    CLOUD_API_URL = 'http://localhost:3000/api/v1.0/cloud/'
+    CLOUD_API_URL = 'http://localhost:3010/api/v1.0/cloud/'
     intro = 'Welcome to the Serverless Manager Console. Type help or ? to list commands.'
 
     def do_start(self, args):
