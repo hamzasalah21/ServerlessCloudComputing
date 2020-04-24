@@ -8,8 +8,11 @@ To start the manager
 ------------------------------------------------------------------------
 cd gini5/backend/src/gcloud/serverless/Manager
 python3.7 main.py
+start weather linuxacademycontent/weather-app 3000 "/bin/sh -c ./bin/www"
 
 > help
 > start [service] [docker_image] [port] [command]
 > stop [service]
 > quit
+
+ curl -X POST --data "city=Montreal" http://localhost:3000

@@ -3,6 +3,7 @@ __author__ = "Laetitia Fesselier"
 import cmd
 import requests
 import docker
+import shlex
 
 # listen to receive stats 
 # before quitting stop everything
@@ -24,7 +25,7 @@ class ServerlessManager(cmd.Cmd):
         image = args_list[1]
         port = args_list[2]
         command = args_list[3]
-
+        
         if service and service in self.services:
             print("Service " + service + " is already running.")
             return
@@ -124,7 +125,7 @@ class ServerlessManager(cmd.Cmd):
 
 def parse(arg):
     'Convert a series of arguments to an argument tuple'
-    return tuple(map(str, arg.split()))
+    return shlex.split(arg)
 
 if __name__ == '__main__':
     ServerlessManager().cmdloop()
