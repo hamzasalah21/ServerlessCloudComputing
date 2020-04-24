@@ -2,7 +2,7 @@ __author__ = "Laetitia Fesselier"
 
 import cmd
 import requests
-import docker
+import docker, ast
 import shlex
 
 # listen to receive stats 
@@ -104,24 +104,19 @@ class ServerlessManager(cmd.Cmd):
     def do_scale(self, args):
         for service in self.services:
             for containerid in self.services[service]:
-                #trying with the low_level API 
                 client = docker.from_env()
-                client_lowlevel = docker.APIClient(base_url='unix://var/run/docker.sock')
-                client_stats = client_lowlevel.stats(container=containerid, decode=True, stream=False)
-                # tried with the dockerClient instead
-                """client = docker.DockerClient(base_url='unix://var/run/docker.sock')
                 container = client.containers.get(str(containerid))
-                status = client.stats(str(containerid))
-                """
-                #version traditional REST API requests
-                """resp = requests.get("unix:///var/run/docker.sock/containers/" + str(containerid)+ "/stats")
-                if resp.status_code == 200:
-                    container_info = resp.json()
-                    total_cpu_usage = container_info["cpu_stats"]["cpu_usage"]["total_usage"]
-                    if total_cpu_usage > .80:
-                        print('add containers')
-                    elif total_cpu_usage < 0.01:
-                        print('remove containers')"""
+                stats = container.stats(decode=True)
+                stats = next(stats)
+                cpu_delta = stats['cpu_stats']['cpu_usage']['total_usage']
+                sys_delta = stats['cpu_stats']['system_cpu_usage']
+                cpu_percent = (cpu_delta/sys_delta) * len(stats['cpu_stats']['cpu_usage']['percpu_usage'])
+                print("CPU % = " + str(cpu_percent))
+
+                if cpu_percent > .80:
+                    print('add containers')
+                elif cpu_percent < 0.01:
+                    print('remove containers')
 
 def parse(arg):
     'Convert a series of arguments to an argument tuple'
