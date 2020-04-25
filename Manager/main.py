@@ -49,9 +49,9 @@ class ServerlessManager(cmd.Cmd):
                 
                 containers = {}
                 for i in range(len(data['Containers'])):
-                    # Initilize the CPU usage of each container to 0
+                    # Initialize the CPU usage of each container to 0
                     for name in data['Containers'][i]:
-                        containers[name] = 0  
+                        containers[name] = 0
                 
                 self.services[service] = containers
 
@@ -103,20 +103,46 @@ class ServerlessManager(cmd.Cmd):
 
     def do_scale(self, args):
         for service in self.services:
+            i = 0
             for containerid in self.services[service]:
+                print('Containerid : ' + str(containerid))
                 client = docker.from_env()
-                container = client.containers.get(str(containerid))
+                container = client.containers.get(containerid)
                 stats = container.stats(decode=True)
                 stats = next(stats)
                 cpu_delta = stats['cpu_stats']['cpu_usage']['total_usage']
                 sys_delta = stats['cpu_stats']['system_cpu_usage']
                 cpu_percent = (cpu_delta/sys_delta) * len(stats['cpu_stats']['cpu_usage']['percpu_usage'])
                 print("CPU % = " + str(cpu_percent))
-
                 if cpu_percent > .80:
-                    print('add containers')
+                    print('Adding containers.')
+                    req = requests.get(url=self.CLOUD_API_URL + 'services/' + service)
+                    data = req.json()
+                    if req.ok:
+                        weight = int(data['Containers'][i][containerid]['Weight']) + 1
+                        key = data['Containers'][i][containerid]['Name']
+
+                        params = {'key': key, 'value': str(weight), 'balance':'roundrobin', 'action':'PUT'}
+
+                        req = requests.post(url=self.CLOUD_API_URL + 'config/' + service, json=params)
+                        data = req.json()
+
+                    print("Service " + key + " updated.")
                 elif cpu_percent < 0.01:
-                    print('remove containers')
+                    print('Removing containers.')
+                    req = requests.get(url=self.CLOUD_API_URL + 'services/' + service)
+                    data = req.json()
+                    if req.ok:
+                        weight = int(data['Containers'][i][containerid]['Weight']) - 1
+                        key = data['Containers'][i][containerid]['Name']
+
+                        params = {'key': key, 'value': str(weight), 'balance':'roundrobin', 'action':'PUT'}
+
+                        req = requests.post(url=self.CLOUD_API_URL + 'config/' + service, json=params)
+                        data = req.json()
+
+                    print("Service " + key + " updated.")
+                i += 1
 
 def parse(arg):
     'Convert a series of arguments to an argument tuple'
