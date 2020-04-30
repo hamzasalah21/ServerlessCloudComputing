@@ -1,6 +1,6 @@
 import cmd
 import requests
-import docker, threading
+import docker, threading, time
 import shlex
 
 # listen to receive stats 
@@ -196,12 +196,17 @@ class ServerlessManager(cmd.Cmd):
                         data = req.json()
                         if req.ok:
                             weight = int(data['Containers'][i][containerid]['Weight']) + 1
+                            if weight > 255:
+                                weight = 255
                             key = data['Containers'][i][containerid]['Name']
 
                             params = {'key': key, 'value': str(weight), 'balance':'roundrobin', 'action':'PUT'}
 
                             req = requests.post(url=self.CLOUD_API_URL + 'config/' + service, json=params)
                             data = req.json()
+
+                            params = { 'size' : str(len(self.services[service]) + 1)}
+                            req = requests.post(url=self.CLOUD_API_URL + 'scale/' + service, json=params)
 
                         #print("Container "+ key +" from service "+ service +" has been updated.")
                     elif cpu_percent < self.min_cpu:
@@ -220,9 +225,13 @@ class ServerlessManager(cmd.Cmd):
                             req = requests.post(url=self.CLOUD_API_URL + 'config/' + service, json=params)
                             data = req.json()
 
+                            params = {'size': str(len(self.services[service]) - 1)}
+                            req = requests.post(url=self.CLOUD_API_URL + 'scale/' + service, json=params)
+
                         #print("Container "+ key +" from service "+ service +" has been updated.")
                     i += 1
-                #threading.Thread.join()
+            time.sleep(5)
+
 
 
 def parse(arg):
