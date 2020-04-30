@@ -112,7 +112,10 @@ class ServerlessManager(cmd.Cmd):
                 for containerid in self.services[service]:
                     #print('Containerid : ' + str(containerid))
                     client = docker.from_env()
-                    container = client.containers.get(containerid)
+                    try:
+                        container = client.containers.get(containerid)
+                    except:
+                        continue
                     stats = container.stats(decode=True)
                     stats = next(stats)
                     cpu_delta = stats['cpu_stats']['cpu_usage']['total_usage']
@@ -120,7 +123,7 @@ class ServerlessManager(cmd.Cmd):
                     cpu_percent = (cpu_delta/sys_delta) * len(stats['cpu_stats']['cpu_usage']['percpu_usage'])
                     #print("CPU % = " + str(cpu_percent))
                     if cpu_percent > .80:
-                        #print('Adding containers.')
+                        print('Adding containers.')
                         req = requests.get(url=self.CLOUD_API_URL + 'services/' + service)
                         data = req.json()
                         if req.ok:
@@ -139,7 +142,7 @@ class ServerlessManager(cmd.Cmd):
 
                         #print("Container "+ key +" from service "+ service +" has been updated.")
                     elif cpu_percent < 0.01:
-                        #print('Removing containers.')
+                        print('Removing containers.')
                         req = requests.get(url=self.CLOUD_API_URL + 'services/' + service)
                         data = req.json()
                         if req.ok:
@@ -154,7 +157,7 @@ class ServerlessManager(cmd.Cmd):
                             req = requests.post(url=self.CLOUD_API_URL + 'config/' + service, json=params)
                             data = req.json()
 
-                            params = {'size': str(len(self.services[service]) - 1)}
+                            params = {'size': len(self.services[service]) - 1}
                             req = requests.post(url=self.CLOUD_API_URL + 'scale/' + service, json=params)
 
                         #print("Container "+ key +" from service "+ service +" has been updated.")
