@@ -19,7 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c811bfaa-fd41-4e38-8155-5bf8564b9454" name="Default Changelist" comment="Successfully updating the weights when scale is called and keeps updating the weights in the background.">
+    <list default="true" id="c811bfaa-fd41-4e38-8155-5bf8564b9454" name="Default Changelist" comment="Successfully updating the weights when scale is called.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Manager/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Manager/main.py" afterDir="false" />
     </list>
@@ -91,21 +91,7 @@
       <option name="project" value="LOCAL" />
       <updated>1587786270984</updated>
     </task>
-    <task id="LOCAL-00002" summary="Successfully updating the weights when scale is called and keeps updating the weights in the background.">
-      <created>1587790120723</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1587790120723</updated>
-    </task>
-    <task id="LOCAL-00003" summary="scaling added + sleep for thread.">
-      <created>1588284866008</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1588284866008</updated>
-    </task>
-    <option name="localTasksCounter" value="4" />
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -118,76 +104,51 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Successfully updating the weights when scale is called." />
-    <MESSAGE value="Successfully updating the weights when scale is called and keeps updating the weights in the background." />
-    <MESSAGE value="scaling added + sleep for thread." />
-    <option name="LAST_COMMIT_MESSAGE" value="scaling added + sleep for thread." />
+    <option name="LAST_COMMIT_MESSAGE" value="Successfully updating the weights when scale is called." />
   </component>
   <component name="WindowStateProjectService">
-    <state x="439" y="100" width="1261" height="843" maximized="true" key="DiffContextDialog" timestamp="1588290239511">
-      <screen x="0" y="339" width="1920" height="741" />
+    <state width="1276" height="272" key="GridCell.Tab.0.bottom" timestamp="1587789982526">
+      <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state x="439" y="100" width="1261" height="843" maximized="true" key="DiffContextDialog/1920.312.1366.768/0.339.1920.741@0.339.1920.741" timestamp="1588290239511" />
-    <state width="1438" height="294" key="GridCell.Tab.0.bottom" timestamp="1588290853635">
-      <screen x="0" y="339" width="1920" height="741" />
+    <state width="1276" height="175" key="GridCell.Tab.0.bottom/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587789012717" />
+    <state width="1276" height="272" key="GridCell.Tab.0.bottom/1920.312.1366.768/67.27.1299.741@67.27.1299.741" timestamp="1587789982526" />
+    <state width="1276" height="272" key="GridCell.Tab.0.center" timestamp="1587789982526">
+      <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state width="1438" height="294" key="GridCell.Tab.0.bottom/1920.312.1366.768/0.339.1920.741@0.339.1920.741" timestamp="1588290853635" />
-    <state width="1276" height="100" key="GridCell.Tab.0.bottom/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587856861685" />
-    <state width="1276" height="100" key="GridCell.Tab.0.bottom/1920.312.1366.768/67.27.1299.741@67.27.1299.741" timestamp="1587790050258" />
-    <state width="1438" height="294" key="GridCell.Tab.0.center" timestamp="1588290853635">
-      <screen x="0" y="339" width="1920" height="741" />
+    <state width="1276" height="175" key="GridCell.Tab.0.center/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587789012717" />
+    <state width="1276" height="272" key="GridCell.Tab.0.center/1920.312.1366.768/67.27.1299.741@67.27.1299.741" timestamp="1587789982526" />
+    <state width="1276" height="272" key="GridCell.Tab.0.left" timestamp="1587789982526">
+      <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state width="1438" height="294" key="GridCell.Tab.0.center/1920.312.1366.768/0.339.1920.741@0.339.1920.741" timestamp="1588290853635" />
-    <state width="1276" height="100" key="GridCell.Tab.0.center/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587856861685" />
-    <state width="1276" height="100" key="GridCell.Tab.0.center/1920.312.1366.768/67.27.1299.741@67.27.1299.741" timestamp="1587790050258" />
-    <state width="1438" height="294" key="GridCell.Tab.0.left" timestamp="1588290853635">
-      <screen x="0" y="339" width="1920" height="741" />
+    <state width="1276" height="175" key="GridCell.Tab.0.left/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587789012716" />
+    <state width="1276" height="272" key="GridCell.Tab.0.left/1920.312.1366.768/67.27.1299.741@67.27.1299.741" timestamp="1587789982526" />
+    <state width="1276" height="272" key="GridCell.Tab.0.right" timestamp="1587789982526">
+      <screen x="67" y="27" width="1299" height="741" />
     </state>
-    <state width="1438" height="294" key="GridCell.Tab.0.left/1920.312.1366.768/0.339.1920.741@0.339.1920.741" timestamp="1588290853635" />
-    <state width="1276" height="100" key="GridCell.Tab.0.left/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587856861685" />
-    <state width="1276" height="100" key="GridCell.Tab.0.left/1920.312.1366.768/67.27.1299.741@67.27.1299.741" timestamp="1587790050258" />
-    <state width="1438" height="294" key="GridCell.Tab.0.right" timestamp="1588290853635">
-      <screen x="0" y="339" width="1920" height="741" />
-    </state>
-    <state width="1438" height="294" key="GridCell.Tab.0.right/1920.312.1366.768/0.339.1920.741@0.339.1920.741" timestamp="1588290853635" />
-    <state width="1276" height="100" key="GridCell.Tab.0.right/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587856861685" />
-    <state width="1276" height="100" key="GridCell.Tab.0.right/1920.312.1366.768/67.27.1299.741@67.27.1299.741" timestamp="1587790050258" />
-    <state width="1276" height="100" key="GridCell.Tab.1.bottom" timestamp="1587856861682">
+    <state width="1276" height="175" key="GridCell.Tab.0.right/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587789012717" />
+    <state width="1276" height="272" key="GridCell.Tab.0.right/1920.312.1366.768/67.27.1299.741@67.27.1299.741" timestamp="1587789982526" />
+    <state width="1276" height="100" key="GridCell.Tab.1.bottom" timestamp="1587786188225">
       <screen x="1920" y="312" width="1366" height="768" />
     </state>
-    <state width="1276" height="100" key="GridCell.Tab.1.bottom/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587856861682" />
-    <state width="1276" height="100" key="GridCell.Tab.1.center" timestamp="1587856861682">
+    <state width="1276" height="100" key="GridCell.Tab.1.bottom/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587786188225" />
+    <state width="1276" height="100" key="GridCell.Tab.1.center" timestamp="1587786188225">
       <screen x="1920" y="312" width="1366" height="768" />
     </state>
-    <state width="1276" height="100" key="GridCell.Tab.1.center/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587856861682" />
-    <state width="1276" height="100" key="GridCell.Tab.1.left" timestamp="1587856861682">
+    <state width="1276" height="100" key="GridCell.Tab.1.center/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587786188225" />
+    <state width="1276" height="100" key="GridCell.Tab.1.left" timestamp="1587786188225">
       <screen x="1920" y="312" width="1366" height="768" />
     </state>
-    <state width="1276" height="100" key="GridCell.Tab.1.left/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587856861682" />
-    <state width="1276" height="100" key="GridCell.Tab.1.right" timestamp="1587856861682">
+    <state width="1276" height="100" key="GridCell.Tab.1.left/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587786188225" />
+    <state width="1276" height="100" key="GridCell.Tab.1.right" timestamp="1587786188225">
       <screen x="1920" y="312" width="1366" height="768" />
     </state>
-    <state width="1276" height="100" key="GridCell.Tab.1.right/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587856861682" />
+    <state width="1276" height="100" key="GridCell.Tab.1.right/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587786188225" />
     <state x="2125" y="339" key="SettingsEditor" timestamp="1587762187397">
       <screen x="1920" y="312" width="1366" height="768" />
     </state>
     <state x="2125" y="339" key="SettingsEditor/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587762187397" />
-    <state x="2407" y="623" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587856856060">
-      <screen x="1920" y="312" width="1366" height="768" />
-    </state>
-    <state x="2407" y="623" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1587856856060" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Manager/main.py</url>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
