@@ -12,7 +12,7 @@ class ServerlessManager(cmd.Cmd):
     CLOUD_API_URL = 'http://localhost:3010/api/v1.0/cloud/'
     intro = 'Welcome to the Serverless Manager Console. Type help or ? to list commands.'
     min_cpu = 0.01
-    max_cpu = 0.8
+    max_cpu = 0.05
 
     def do_update_cpu_limits(self, args):
         args_list = parse(args)  
@@ -105,16 +105,8 @@ class ServerlessManager(cmd.Cmd):
             if data['success']:
                 print("Service " + service + " created.")
 
-                req = requests.get(url = self.CLOUD_API_URL + 'services/' + service)
-                data = req.json() 
-                
-                containers = {}
-                for i in range(len(data['Containers'])):
-                    # Initialize the CPU usage of each container to 0
-                    for name in data['Containers'][i]:
-                        containers[name] = 0
-                
-                self.services[service] = containers
+                self.services[service] = {}
+                self.update_service_containers_info(service)
 
             else:
                 print("A problem was encountered while creating the service " + service + ".")
@@ -127,6 +119,25 @@ class ServerlessManager(cmd.Cmd):
             'Start the provided service if an image with the provided name exists on DockerHub.',
         ]))
 
+
+    def update_service_containers_info(self, service):
+        req = requests.get(url = self.CLOUD_API_URL + 'services/' + service)
+        data = req.json() 
+        
+        cloud_containers = []
+
+        # Find the new containers and initialize their CPU usage to 0
+        for i in range(len(data['Containers'])):
+            for cont_name in data['Containers'][i]:
+                cloud_containers.append(cont_name)
+                if cont_name not in self.services[service]:
+                    self.services[service][cont_name] = 0
+            
+        # Remove the missing containers
+        for cont_name in list(self.services[service]):
+            if cont_name not in cloud_containers:
+                del self.services[service][cont_name]
+        
 
     def do_stop(self, service):
         if service and service not in self.services.keys():
@@ -169,35 +180,36 @@ class ServerlessManager(cmd.Cmd):
         return True
 
 
-    def do_scale(self, args):
-        print('Scaling service has started.')
-        thread = threading.Thread(target=self.scale)
-        thread.daemon = True
-        thread.start()
-
-
     def scale(self):
         while True:
-            for service in self.services:
+            for service in list(self.services):
                 i = 0
+                cum_cpu_percent = 0
+
                 for containerid in self.services[service]:
-                    #print('Containerid : ' + str(containerid))
+                    # print('Containerid : ' + str(containerid))
                     client = docker.from_env()
-                    container = client.containers.get(containerid)
+                    
+                    try:
+                        container = client.containers.get(containerid)
+                    except:
+                        continue
+
                     stats = container.stats(decode=True)
                     stats = next(stats)
                     cpu_delta = stats['cpu_stats']['cpu_usage']['total_usage']
                     sys_delta = stats['cpu_stats']['system_cpu_usage']
                     cpu_percent = (cpu_delta/sys_delta) * len(stats['cpu_stats']['cpu_usage']['percpu_usage'])
-                    #print("CPU % = " + str(cpu_percent))
+
+                    # print("CPU % = " + str(cpu_percent))
+                    
                     if cpu_percent > self.max_cpu:
-                        #print('Adding containers.')
+                        # print('Adding containers.')
                         req = requests.get(url=self.CLOUD_API_URL + 'services/' + service)
                         data = req.json()
                         if req.ok:
                             weight = int(data['Containers'][i][containerid]['Weight']) + 1
-                            if weight > 255:
-                                weight = 255
+                            if weight > 255: weight = 255
                             key = data['Containers'][i][containerid]['Name']
 
                             params = {'key': key, 'value': str(weight), 'balance':'roundrobin', 'action':'PUT'}
@@ -209,14 +221,14 @@ class ServerlessManager(cmd.Cmd):
                             req = requests.post(url=self.CLOUD_API_URL + 'scale/' + service, json=params)
 
                         #print("Container "+ key +" from service "+ service +" has been updated.")
-                    elif cpu_percent < self.min_cpu:
-                        #print('Removing containers.')
+                    
+                    elif cpu_percent < self.min_cpu and len(self.services[service]) > 1:
+                        # print('Removing containers.')
                         req = requests.get(url=self.CLOUD_API_URL + 'services/' + service)
                         data = req.json()
                         if req.ok:
                             weight = int(data['Containers'][i][containerid]['Weight']) - 1
-                            if(weight < 0):
-                                weight = 0
+                            if(weight < 0): weight = 0
 
                             key = data['Containers'][i][containerid]['Name']
 
@@ -225,13 +237,16 @@ class ServerlessManager(cmd.Cmd):
                             req = requests.post(url=self.CLOUD_API_URL + 'config/' + service, json=params)
                             data = req.json()
 
-                            params = {'size': str(len(self.services[service]) - 1)}
+                            params = {'size': len(self.services[service]) - 1}
                             req = requests.post(url=self.CLOUD_API_URL + 'scale/' + service, json=params)
 
-                        #print("Container "+ key +" from service "+ service +" has been updated.")
-                    i += 1
-            time.sleep(5)
+                        # print("Container "+ key +" from service "+ service +" has been updated.")
 
+                    i += 1
+
+                self.update_service_containers_info(service)
+
+            time.sleep(5)
 
 
 def parse(arg):
@@ -240,6 +255,11 @@ def parse(arg):
 
 if __name__ == '__main__':
     try:
+        print('Scaling service has started.')
+        thread = threading.Thread(target = ServerlessManager().scale)
+        thread.daemon = True
+        thread.start()
+
         ServerlessManager().cmdloop()
     except Exception as e:
         str(e)
